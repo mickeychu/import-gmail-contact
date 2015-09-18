@@ -1,10 +1,13 @@
 <?php
-/***** EDIT BELOW LINES *****/
-
-$xls_filename = 'export_'.date('Y-m-d').'.xls'; // Define Excel (.xls) file name
- 
     // Connect to the MySQL database  
     require "scripts/connect.php";
+$xls_filename = 'export_'.date('Y-m-d').'.xls'; // Define Excel (.xls) file name
+ 
+/***** DO NOT EDIT BELOW LINES *****/
+// Create MySQL connection
+$result = mysqli_query($link, "SELECT email FROM `badminton_list`");
+
+
  
 // Header info settings
 header("Content-Type: application/xls");
@@ -17,17 +20,17 @@ header("Expires: 0");
 $sep = "\t"; // tabbed character
  
 // Start of printing column names as names of MySQL fields
-for ($i = 0; $i<mysql_num_fields($result); $i++) {
-  echo mysql_field_name($result, $i) . "\t";
+while ($property = mysqli_fetch_field($result)) {
+    echo $property->name.$sep;
 }
 print("\n");
 // End of printing column names
  
 // Start while loop to get data
-while($row = mysql_fetch_row($result))
+while($row = mysqli_fetch_row($result))
 {
   $schema_insert = "";
-  for($j=0; $j<mysql_num_fields($result); $j++)
+  for($j=0; $j<mysqli_num_fields($result); $j++)
   {
     if(!isset($row[$j])) {
       $schema_insert .= "NULL".$sep;
