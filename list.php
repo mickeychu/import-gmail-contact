@@ -1,44 +1,42 @@
 <?php 
-ini_set('session.save_path', dirname(__FILE__));
-session_start();
-if (!isset($_SESSION["admin"])) {
-    header("location: admin_login.php"); 
-    exit();
+//Collect data to show full list¨
+    // Connect to the MySQL database  
+    require "scripts/connect.php";
+$username = "mickey";
+$email_list = "";
+$sql = mysqli_query($link, "SELECT * FROM `imported_email`");
+$number = 0;
+$email_count = mysqli_num_rows($sql); // count the amount of email in database
+if ($email_count > 0) {
+	while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC)) {
+		$email_ID = $row["email_ID"];
+		$email = $row["email"];
+		$number++;
+		$email_list .='<tr>
+						  <td width="59">'.$number.'</td>
+						  <td width="419" align="center">'.$email.'</td>
+						  <td width="125"><input type="checkbox" name="check[]" value="'.$email.'" style="transform: scale(1.5)"></td>
+					   </tr>';
+		}
 }
-// Be sure to check that this admin SESSION value is in fact in the database
-//$adminID = $_SESSION["id"]; // filter everything but numbers and letters
-$admin = $_SESSION["admin"]; // filter everything but numbers and letters
-// Run mySQL query to be sure that this person is an admin and that their password session var equals the database information
-// Connect to the MySQL database  
-require "scripts/connect.php"; 
-$sql = mysqli_query($link, "SELECT * FROM `admin` WHERE username='$admin' "); // query the person
-// ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
-$existCount = mysqli_num_rows($sql); // count the row nums
-if ($existCount == 0) { // evaluate the count
-	 echo 'Your login session data is not on record in the database and try again <a href="admin_login.php">Click Here</a>';
-     exit();
+else {
+	$email_list = "You have no email yet!";
 }
 ?>
 <?php
-if (isset ($_POST['submit']))
+//Add selected email to badminton_list
+if (isset ($_POST['badminton']))
 {
-	$items = $_POST['check'];
-$name = $_POST['admin'];
-for ($i = 0; $i<sizeof($items);$i++){
-	if ($items[$i] == "badminton"){
-		$sql1 = mysqli_query($link, "INSERT INTO `badminton` (`id`, `name`) VALUES (NULL, '$name');");
-		}
-	else if ($items[$i] == "social"){
-		$sql2 = mysqli_query($link, "INSERT INTO `social` (`id`, `name`) VALUES (NULL, '$name');");
-		}
-	else if ($items[$i] == "other"){
-		$sql3 = mysqli_query($link, "INSERT INTO `other` (`id`, `name`) VALUES (NULL, '$name');");
+	$emails = $_POST['check'];
+	$username = "mickey";
+	foreach($emails as $email)
+	{
+		$sql = "INSERT INTO `jolly`.`badminton_list` (`id`, `email`, `username`) VALUES (NULL, '$email', '$username');";
+ 		$query = mysqli_query($link, $sql) or die(mysqli_error($link));
 	}
-	
+	echo "imported OK!!!";
+	exit();
 }
-		 header("location: index.php");
-         exit();
-	}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -84,33 +82,20 @@ for ($i = 0; $i<sizeof($items);$i++){
     <div class="content_bottom"></div>
     <div class="content_top"><span id="portfolio"></span></div>
     <div class="content">
-      <h1 style="font-size:18px">Welcome <span style="color:#4C5EED; text-transform:uppercase"><?php echo $admin?></span>, What activities do you want to join?</h1>
+      <h1 style="font-size:18px">Welcome <span style="color:#4C5EED; text-transform:uppercase"><?php echo $username?></span></h1>
       <form action="list.php" method="post">
-      <table width="404" height="322" border="1">
-  <tbody align="center">
+		<table width="625" height="147" border="1">
+  <tbody>
     <tr>
-      <td width="327"><h2>Activiy</h2></td>
-      <td width="61"></td>
-    </tr>
+      <td colspan="3">&nbsp;</td>
+      </tr>
+	<?php echo $email_list;?>
     <tr>
-      <td><h2>Badminton</h2></td>
-      <td><input type="checkbox" name="check[]" value="badminton" style="transform: scale(1.5)"></td>
-    </tr>
-    <tr>
-      <td><h2>Social</h2></td>
-      <td><input type="checkbox" name="check[]" value="social" style="transform: scale(1.5)"></td>
-    </tr>
-    <tr>
-      <td><h2>Other</h2></td>
-      <td><input type="checkbox" name="check[]" value="other" style="transform: scale(1.5)"></td>
-    </tr>
-    <tr>
-      <td><h2>
-      <input type="hidden" value="<?php echo $admin?>" name="admin"/>
-        <input type="submit" value="Complete" name="submit">
-      </h2></td>
-      <td>&nbsp;</td>
-    </tr>
+      <td colspan="3">
+      	<input type="hidden" name ="badminton" value="badminton"/>
+      	<input type="submit" name="add" id="add" value="Add to Badminton Group" style="width:auto" />
+      </td>
+      </tr>
   </tbody>
 </table>
 

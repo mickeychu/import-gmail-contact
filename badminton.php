@@ -34,9 +34,6 @@
     <div class="content_top"><span id="portfolio"></span></div>
     <div class="content">
     <?php
-	    // Connect to the MySQL database  
-    require "scripts/connect.php";
-	$username = "mickey";
 $client_id = '822743733345-84qc52psgjnadlk19kilngibbu84nr48.apps.googleusercontent.com';
 $client_secret = 'c1MABQBP8vUa2LiHF5DV3b_X';
 $redirect_uri = 'http://localhost/import-gmail-contact/oauth.php';
@@ -102,15 +99,12 @@ $xml->registerXPathNamespace('gd', 'http://schemas.google.com/g/2005');
 $result = $xml->xpath('//gd:email');
 $email_list = '';
 $count = 1;
-
 foreach ($result as $title) {
-	$email = $title->attributes()->address;
   $email_list.= '<tr>
-  					<td width="413">'.$count.'--'.$email.'</td>
+  					<td width="413">'.$count.'--'.$title->attributes()->address.'</td>
       				<td width="241"><input type="checkbox" name="check[]" value="badminton" style="transform: scale(1.5)"></td>
 	  			</tr>';
-  $sql = "INSERT INTO `imported_email` (`email_ID`, `email`, `username`) VALUES (NULL, '$email', '$username');";
-  $query = mysqli_query($link, $sql) or die(mysqli_error($link));
+  
   $count++;
 }
 ?>

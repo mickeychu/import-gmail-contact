@@ -1,33 +1,3 @@
-<?php
-	require "scripts/connect.php";
-		
-	mysqli_set_charset($link, 'utf8');
-	$name_list1 = '';
-	$sql1 = mysqli_query($link, "SELECT * FROM `badminton`");
-
-	$count1 = mysqli_num_rows($sql1);
-	while ($row1 = mysqli_fetch_array($sql1, MYSQLI_ASSOC)){		
-		$name1 = $row1['name'];
-		$name_list1 .= '<span style="color:blue">'.$name1.'</span>
-     					 <br/>';
-		}
-	$name_list2 = '';
-	$sql2 = mysqli_query($link, "SELECT * FROM `social`");
-	$count2 = mysqli_num_rows($sql2);
-	while ($row2 = mysqli_fetch_array($sql2, MYSQLI_ASSOC)){
-		$name2 = $row2['name'];
-		$name_list2 .= '<span style="color:blue">'.$name2.'</span>
-     					 <br/>';
-		}
-	$name_list3 = '';
-	$sql3 = mysqli_query($link, "SELECT * FROM `other`");
-	$count3 = mysqli_num_rows($sql3);
-	while ($row3 = mysqli_fetch_array($sql3, MYSQLI_ASSOC)){
-		$name3 = $row3['name'];
-		$name_list3 .= '<span style="color:blue">'.$name3.'</span>
-     					 <br/>';
-		}		
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -73,28 +43,7 @@
             
 			<table width="723" height="398" border="1">
   <tbody align="center">
-    <tr>
-      <td width="230" height="66"><h2>Activity</h2></td>
-      <td width="322"><h2>People joined</h2></td>
-      <td width="149"><h2>Join</h2></td>
-    </tr>
-    <tr>
-      <td><h3>Badminton <span style="color:red">(<?php echo $count1;?>)</span></h3></td>
-      <td>
-		<?php echo $name_list1;?>
-      </td>
-      <td><input type="checkbox" name="check[]" value="badminton" style="transform: scale(1.5)"></td>
-    </tr>
-    <tr>
-      <td><h3>Social <span style="color:red">(<?php echo $count2;?>)</span></h3></td>
-      <td><?php echo $name_list2;?></td>
-      <td><input type="checkbox" name="check[]" value="badminton" style="transform: scale(1.5)"></td>
-    </tr>
-    <tr>
-      <td><h3>Other <span style="color:red">(<?php echo $count3;?>)</span></h3></td>
-      <td><?php echo $name_list3;?></td>
-      <td><input type="checkbox" name="check[]" value="badminton" style="transform: scale(1.5)"></td>
-    </tr>
+
     <tr>
       <td height="98" colspan="3">
           <a href="admin_login.php">
@@ -102,7 +51,7 @@
           </a>
           <br/>
           <br/>
-        	<a style="margin-top:20px" href="https://accounts.google.com/o/oauth2/auth?client_id=822743733345-63kvc1r16hdv8jh532r8jq4rhlhkj3o3.apps.googleusercontent.com&redirect_uri=http://localhost/import-gmail-contact/oauth.php&scope=https://www.google.com/m8/feeds/&response_type=code"><input type="button" value="Import your contacts from Gmail" style="transform: scale(1.5)" /></a>
+        	<a style="margin-top:20px" href="https://accounts.google.com/o/oauth2/auth?client_id=822743733345-84qc52psgjnadlk19kilngibbu84nr48.apps.googleusercontent.com&redirect_uri=http://localhost/import-gmail-contact/oauth.php&scope=https://www.google.com/m8/feeds/&response_type=code"><input type="button" value="Import your contacts from Gmail" style="transform: scale(1.5)" /></a>
       </td>
       </tr>
   </tbody>
